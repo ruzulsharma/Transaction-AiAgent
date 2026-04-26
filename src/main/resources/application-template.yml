@@ -16,4 +16,4 @@ groq:
   url: ${GROQ_URL}
 
 app:
-  kafka-enabled: ${KAFKA_ENABLED:true}
+  kafka-enabled: ${KAFKA_ENABLED:false}
