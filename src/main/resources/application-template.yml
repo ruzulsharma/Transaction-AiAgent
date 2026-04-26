@@ -18,4 +18,4 @@ groq:
 app:
   kafka-enabled: ${KAFKA_ENABLED:false}
   frontend:
-    url: ${FRONTEND_URL:http://localhost:5173}
+    url:  ${FRONTEND_URL:http://localhost:5173}
