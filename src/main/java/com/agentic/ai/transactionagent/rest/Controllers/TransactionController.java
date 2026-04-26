@@ -18,10 +18,8 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("v1/api/transactions")
 @RequiredArgsConstructor
-public class TransactionController {
-    @Autowired
+public class TransactionController { @Autowired
     private  final TransactionService agentService;
-    @Autowired
     private final TransactionProducer producer;
 
     @Value("${app.kafka-enabled}")
