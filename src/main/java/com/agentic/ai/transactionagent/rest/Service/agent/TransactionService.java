@@ -106,7 +106,9 @@ public class TransactionService {
         tx.setStatus(mapStatus(finalDecision.getDecision()));
         tx.setGroqReasoning(finalDecision.getReason());
 
+        repository.save(tx);
         return mapToResponse(tx, finalDecision);
+
     }
 
     private TransactionResponse mapToResponse(Transaction tx, AgentDecision finalDecision) {
