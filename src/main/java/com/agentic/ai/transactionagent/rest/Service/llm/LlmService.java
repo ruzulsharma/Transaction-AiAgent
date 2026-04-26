@@ -17,10 +17,10 @@ import java.util.Map;
 public class LlmService {
 
     @Value("${groq.api-key}")
-    private String apiKey;
+    private String apiKey ;
 
     @Value("${groq.url}")
-    private String url;
+    private String url ;
 
     private final WebClient.Builder webClientBuilder;
     private final ObjectMapper objectMapper = new ObjectMapper();

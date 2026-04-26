@@ -1,10 +1,12 @@
 package com.agentic.ai.transactionagent.rest.Controllers;
 
 import com.agentic.ai.transactionagent.kafka.TransactionProducer;
+import com.agentic.ai.transactionagent.rest.dto.TransactionResponse;
 import com.agentic.ai.transactionagent.rest.model.Transaction;
 import com.agentic.ai.transactionagent.rest.Service.agent.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,17 +24,9 @@ public class TransactionController {
     @Autowired
     private final TransactionProducer producer;
 
-    //without kafka
-//    @PostMapping("/process")
-//    public ResponseEntity<Transaction> process(@RequestBody Transaction tx) {
-//
-//        tx.setCreatedAt(LocalDateTime.now());
-//        tx.setStatus("NEW");
-//
-//        return ResponseEntity.ok(agentService.process(tx));
-//    }
+    @Value("${app.kafka-enabled}")
+    private boolean kafkaEnabled;
 
-    //kafka
 
     @PostMapping("/process")
     public ResponseEntity<?> create(@RequestBody Transaction tx) {
@@ -40,8 +34,12 @@ public class TransactionController {
         tx.setCreatedAt(LocalDateTime.now());
         tx.setStatus("RECEIVED");
 
-        producer.sendTransaction(tx);
-
-        return ResponseEntity.ok("Transaction received and queued");
+        if (kafkaEnabled) {
+            producer.sendTransaction(tx);
+            return ResponseEntity.ok("Transaction queued (Kafka)");
+        } else {
+            TransactionResponse processed = agentService.process(tx);
+            return ResponseEntity.ok(processed);
+        }
     }
 }
