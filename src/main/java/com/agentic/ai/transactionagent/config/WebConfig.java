@@ -8,21 +8,33 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig {
-
-    @Value("${app.frontend.url}")
+    @Value("${app.frontend.url:http://localhost:5173}")
     private String frontendUrl;
 
+//
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**") // Apply to all API endpoints
-                        .allowedOrigins(frontendUrl) // Use the value from properties
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-            }
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/api/**") // Apply to all API endpoints
+//                        .allowedOrigins(frontendUrl) // Use the value from properties
+//                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+//                        .allowedHeaders("*")
+//                        .allowCredentials(true);
+//            }
+//        };
+//    }
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**") // Better to cover all paths
+                    .allowedOriginPatterns(frontendUrl) // Patterns are more flexible than strict Origins
+                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    .allowedHeaders("*")
+                    .allowCredentials(true)
+                    .maxAge(3600);
+
+                    }
         };
     }
 }
